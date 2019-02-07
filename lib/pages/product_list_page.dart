@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
+import 'package:ecom_mobile_flutter/models/product.dart';
 import 'package:ecom_mobile_flutter/scoped_models/product_scoped.dart';
 import 'package:ecom_mobile_flutter/widgets/product_list/product_card.dart';
 
@@ -57,7 +58,7 @@ class ProductsListPageBody extends StatelessWidget {
 
   _buildListView() {
     Size screenSize = MediaQuery.of(context).size;
-
+    print('products count ' + model.productsCount.toString());
     return Padding(
       padding: const EdgeInsets.only(bottom: 8.0),
       child: model.productsCount == 0
@@ -89,10 +90,12 @@ class ProductsListPageBody extends StatelessWidget {
                     return Container();
                   }
 
-                  return ProductCard(
-                    product1: model.productsList[index - 1],
-                    product2: model.productsList[index],
-                  );
+                  print('build card ' + model.productsList[0].productName);
+                  return Container();
+                  // return ProductCard(
+                  //   product1: model.productsList[index - 1],
+                  //   product2: model.productsList[index],
+                  // );
                 }
               },
             ),

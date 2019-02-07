@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:ecom_mobile_flutter/models/product.dart';
+import 'package:ecom_mobile_flutter/models/api_product.dart';
 import 'package:ecom_mobile_flutter/config.dart';
 
 class ProductsScopedModel extends Model {
@@ -11,24 +12,33 @@ class ProductsScopedModel extends Model {
   bool _isLoading = true;
   bool _hasMoreProducts = true;
 
+  ProductsScopedModel();
+
   List<Product> get productsList => _productsList;
   bool get isLoading => _isLoading;
   bool get hasMoreProducts => _hasMoreProducts;
   int get productsCount => _productsList.length;
 
-  Future<dynamic> _getProductsAPI({limit = 10, cursor = 0}) async {
-    var response = await http.get(
-      Config.API_PRODUCTS_URL + "?limit=$limit&cursor=$cursor",
-      headers: {
-        "Authorization": Config.AuthorizationToken,
-      },
-    ).catchError(
+  Future _getProductsAPI({limit = 10, cursor = 0}) async {
+    _isLoading = true;
+    notifyListeners();
+    print("_getProductsAPI " +
+        Config.API_PRODUCTS_URL +
+        "?limit=$limit&cursor=$cursor");
+    final response =
+        await http.get(Config.API_PRODUCTS_URL + "?limit=$limit&cursor=$cursor",
+            // "https://jsonplaceholder.typicode.com/posts",
+            headers: {"Accept": "application/json"}).catchError(
       (error) {
         return false;
       },
     );
 
-    return json.decode(response.body);
+    _productsList =
+        new ApiProduct.fromJson(json.decode(response.body)).productsList;
+    _hasMoreProducts = false;
+    _isLoading = false;
+    notifyListeners();
   }
 
   getProducts() => _getProductsAPI();
