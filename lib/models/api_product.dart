@@ -8,8 +8,9 @@ class ApiProduct {
   //     : products = parsedJson['products']?.cast<Product>();
 
   factory ApiProduct.fromJson(Map<String, dynamic> parsedJson) {
+    var products = parsedJson['products'] as List;
     return new ApiProduct(
-      products: parsedJson['products']?.cast<Product>(),
+      products: products.map((model) => Product.fromJson(model)).toList(),
     );
   }
 

@@ -90,12 +90,10 @@ class ProductsListPageBody extends StatelessWidget {
                     return Container();
                   }
 
-                  print('build card ' + model.productsList[0].productName);
-                  return Container();
-                  // return ProductCard(
-                  //   product1: model.productsList[index - 1],
-                  //   product2: model.productsList[index],
-                  // );
+                  return ProductCard(
+                    product1: model.productsList[index - 1],
+                    product2: model.productsList[index],
+                  );
                 }
               },
             ),
