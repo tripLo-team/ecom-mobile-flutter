@@ -22,13 +22,11 @@ class ProductsScopedModel extends Model {
   Future _getProductsAPI({limit = 10, cursor = 0}) async {
     _isLoading = true;
     notifyListeners();
-    print("_getProductsAPI " +
-        Config.API_PRODUCTS_URL +
-        "?limit=$limit&cursor=$cursor");
+
+    String url = Config.API_PRODUCTS_URL + "?limit=$limit&cursor=$cursor";
+    print("_getProductsAPI " + url);
     final response =
-        await http.get(Config.API_PRODUCTS_URL + "?limit=$limit&cursor=$cursor",
-            // "https://jsonplaceholder.typicode.com/posts",
-            headers: {"Accept": "application/json"}).catchError(
+        await http.get(url, headers: {"Accept": "application/json"}).catchError(
       (error) {
         return false;
       },

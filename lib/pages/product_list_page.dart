@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-import 'package:ecom_mobile_flutter/models/product.dart';
 import 'package:ecom_mobile_flutter/scoped_models/product_scoped.dart';
 import 'package:ecom_mobile_flutter/widgets/product_list/product_card.dart';
 

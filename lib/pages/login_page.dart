@@ -1,76 +1,123 @@
 import 'package:flutter/material.dart';
+import 'package:ecom_mobile_flutter/pages/register_page.dart';
+import 'package:ecom_mobile_flutter/pages/user_detail_page.dart';
 
 class LoginPage extends StatelessWidget {
-  TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
+  @override
+  Widget build(BuildContext context) {
+    final appTitle = 'Login';
+
+    return MaterialApp(
+      title: appTitle,
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text(appTitle),
+        ),
+        body: LoginForm(),
+      ),
+    );
+  }
+}
+
+class LoginForm extends StatefulWidget {
+  @override
+  LoginFormState createState() {
+    return LoginFormState();
+  }
+}
+
+class LoginFormState extends State<LoginForm> {
+  // Create a global key that will uniquely identify the Form widget and allow
+  // us to validate the form
+  //
+  // Note: This is a `GlobalKey<FormState>`, not a GlobalKey<MyCustomFormState>!
+  final _formKey = GlobalKey<FormState>();
+  String _username;
+  String _password;
 
   @override
   Widget build(BuildContext context) {
-    final emailField = TextField(
-      obscureText: false,
-      style: style,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-          hintText: "Email",
-          border:
-              OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
-    );
-    final passwordField = TextField(
-      obscureText: true,
-      style: style,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-          hintText: "Password",
-          border:
-              OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
-    );
-    final loginButon = Material(
-      elevation: 5.0,
-      borderRadius: BorderRadius.circular(30.0),
-      color: Color(0xff01A0C7),
-      child: MaterialButton(
-        minWidth: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        onPressed: () {},
-        child: Text("Login",
-            textAlign: TextAlign.center,
-            style: style.copyWith(
-                color: Colors.white, fontWeight: FontWeight.bold)),
-      ),
-    );
-
-    return Scaffold(
-      body: Center(
-        child: Container(
-          color: Colors.white,
-          child: Padding(
-            padding: const EdgeInsets.all(36.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
+    // Build a Form widget using the _formKey we created above
+    return Form(
+        key: _formKey,
+        child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: SingleChildScrollView(
+                child: Column(
               children: <Widget>[
-                SizedBox(
-                  height: 155.0,
-                  child: Image.asset(
-                    "assets/logo.png",
-                    fit: BoxFit.contain,
-                  ),
-                ),
-                SizedBox(height: 45.0),
-                emailField,
-                SizedBox(height: 25.0),
-                passwordField,
-                SizedBox(
-                  height: 35.0,
-                ),
-                loginButon,
-                SizedBox(
-                  height: 15.0,
-                ),
+                _usernameField(),
+                _passwordField(),
+                _loginButton(),
+                _toRegisterPage()
               ],
-            ),
-          ),
-        ),
+            ))));
+  }
+
+  _usernameField() {
+    return TextFormField(
+      decoration: const InputDecoration(labelText: 'Username'),
+      keyboardType: TextInputType.text,
+      validator: (value) {
+        if (value.isEmpty) {
+          return 'Username can not be empty';
+        }
+      },
+      onSaved: (val) {
+        _username = val;
+      },
+    );
+  }
+
+  _passwordField() {
+    return TextFormField(
+      decoration: const InputDecoration(labelText: 'Password'),
+      obscureText: true,
+      keyboardType: TextInputType.text,
+      validator: (value) {
+        if (value.isEmpty) {
+          return 'Password can not be empty';
+        }
+      },
+      onSaved: (val) {
+        _password = val;
+      },
+    );
+  }
+
+  _loginButton() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      child: RaisedButton(
+        onPressed: () {
+          // Validate will return true if the form is valid, or false if
+          // the form is invalid.
+          if (_formKey.currentState.validate()) {
+            // If the form is valid, we want to show a Snackbar
+            _formKey.currentState.save();
+            print("Username $_username");
+            print("Password $_password");
+            Scaffold.of(context)
+                .showSnackBar(SnackBar(content: Text('Processing Data')));
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => UserDetailPage()),
+            );
+          }
+        },
+        child: Text('Submit'),
       ),
+    );
+  }
+
+  _toRegisterPage() {
+    return FlatButton(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => RegisterPage()),
+        );
+      },
+      child: Text('Don\'t have an account? Tap here to Register'),
     );
   }
 }
